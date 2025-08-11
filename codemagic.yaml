@@ -12,25 +12,3 @@ workflows:
         script: ./gradlew assembleDebug
     artifacts:
       - app/build/outputs/**/*.apk
-workflows:
-  build-android-release:
-    name: Build Android Release APK
-    max_build_duration: 60
-    environment:
-      vars:
-        JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
-        KEYSTORE_PATH: /tmp/keystore.jks
-        KEY_ALIAS: tashanwin-key
-        KEYSTORE_PASSWORD: 123456
-        KEY_PASSWORD: 123456
-    scripts:
-      - name: Download Keystore
-        script: |
-          echo "Downloading keystore from Codemagic secure storage..."
-          cp $CM_FILES/tashanwin-release.keystore $KEYSTORE_PATH
-      - name: Clean Project
-        script: ./gradlew clean
-      - name: Build Release APK
-        script: ./gradlew assembleRelease -Pandroid.injected.signing.store.file=$KEYSTORE_PATH -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD -Pandroid.injected.signing.key.alias=$KEY_ALIAS -Pandroid.injected.signing.key.password=$KEY_PASSWORD
-    artifacts:
-      - app/build/outputs/**/*.apk
